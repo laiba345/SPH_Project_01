@@ -18,3 +18,4 @@ npm run serve
 4. 采用模块化、组件化、工程化的模式开发
 
 ## 项目功能界面
+![项目主界面](https://github.com/laiba345/SPH_Project_01.git/SPH_Project_01/picture/homePage.png)
