@@ -10,6 +10,8 @@ module.exports = defineConfig({
         // 数据来自于哪一台代理服务器 就使用哪一台代理服务器即可
         target: 'http://gmall-h5-api.atguigu.cn',
       },
-    }
+    }, 
+    host: 'localhost',
+    port: 8080
   }
 })
