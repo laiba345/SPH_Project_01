@@ -258,7 +258,253 @@ rooter/routes.js
 ```
 npm install -S axios nprogress
 ```
-2. 封装
+2. 封装ajax请求模块（二次封装）
+3. 配置代理（可跨域）
+```
+devServer: {
+    proxy: {
+      '/api': {
+        // 数据来自于哪一台代理服务器 就使用哪一台代理服务器即可
+        target: 'http://gmall-h5-api.atguigu.cn',
+      },
+    }, 
+    host: 'localhost',
+    port: 8080
+  }
+```
+### 使用vuex管理状态
+1. 下载依赖包
+```
+npm install -S vuex
+```
+2. 在每一个需要使用vuex管理数据的模块创建一个文件夹，配置index.js, 最后在通过store文件夹下的index.js向外暴露
+![vuex结构图](./picture/store.png)
+3. 注册store: 在main.js文件中
+```
+import store from './store'
+
+new Vue({
+  store, // 注册vuex的store对象  ==> 所有组件对象都有一个$store属性
+})
+```
+
+### 异步显示分类列表：TypeNav
+#### 重难点说明
+1)组件与vuex交互
+2)事件控制二三级分类列表的显示与隐藏
+3)优化高频事件触发处理: 利用lodash进行函数节流处理
+4)优化减小打包文件: 对lodash库实现按需引入 
+5)解决快速移出后可能显示第一个分类的子分类列表的bug
+6)优化减少组件对象数量: 使用编程式导航代替声明式导航
+7)优化事件处理效率: 利用事件委托
+8)利用标签自定义属性携带动态数据
+9)控制一级列表的显示与隐藏
+10)一级列表显示隐藏的过渡效果
+11)优化请求执行的位置, 减少请求次数
+12)合并分类query参数与搜索的关键字params参数
+
+## Mock/模拟数据接口
+1. 下载依赖包
+```
+npm install -S mockjs
+```
+2. Web应用前后端分离
+1)后台向前台提供API接口, 只负责数据的提供和计算，而完全不处理展现
+2)前台通过Http(Ajax)请求获取数据,　在浏览器端动态构建界面显示数据
+
+3. 设计JSON数据结构
+- 理解JSON数据结构（JSON 可以将 JavaScript 对象中表示的一组数据转换为字符串，然后就可以在函数之间轻松地传递这个字符串，或者在异步应用程序中将字符串从 Web 客户机传递给服务器端程序。）
+- 编写模拟JSON数据
+- 一个简单的JSON数据模拟
+```
+{ "people": [
+
+{ "firstName": "Brett", "lastName":"McLaughlin", "email": "aaaa" },
+
+{ "firstName": "Jason", "lastName":"Hunter", "email": "bbbb"},
+
+{ "firstName": "Elliotte", "lastName":"Harold", "email": "cccc" }
+
+]}
+```
+
+## 利用Mock接口实现动态的Home
+### 重难点说明
+1. 使用swiper实现静态页面轮播
+2. 解决多个swiper冲突的问题
+3. 解决swiper动态页面轮播的bug
+4. 定义可复用的轮播组件
+5. 解决Floor组件中轮播有问题的bug
+
+### 下载依赖包
+```
+npm install -S swiper
+```
+### 通用的轮播组件 components/Carousel
+### 首页的ListContainer组件
+### 首页的Floor组件
+### 上面两个组件配置好了在Home组件中使用
+
+## Search路由
+### 重难点说明
+1. 搜索查询条件参数理解与准备
+2. 组件动态数据显示
+3. 根据分类和关键字进行搜索
+4. 根据品牌进行搜索
+5. 根据属性进行搜索
+6. 排序搜索
+7. 自定义分页组件
+
+### 接口请求函数（api/index.js）
+```
+// 请求搜索匹配的商品相关数据
+export const reqProductList = (searchParams) => ajax.post('/list', searchParams)
+```
+### vuex管理搜索模块（store/search/index.js）
+- 管理搜索模块中的数据
+- 接受保存商品列表相关的数据对象
+- 对搜索出来的商品列表相关的数据进行操作
+
+### Search的子组件：属性选择器（pages/Search/SearchSelector）
+
+### 通用的分页组件（Pagination）很多组件都会用到其来进行展示数据列表
+
+### TypeNav组件（商品导航）
+
+### Header组件
+
+### Search路由组件
+
+## 使用阿里图标（iconfont）
+1.在线地址: https://www.iconfont.cn/
+2.注册并登陆
+3.创建一个可以包含需要的所有图标的项目
+4.搜索图标并添加到购物车
+5.将购物车中的图标添加到指定项目
+6.修改图标的名称
+7.选择Font class的使用方式, 并点击生成在线样式url
+8.在index页面中引入此图标的在线样式链接: 
+```
+<link rel="stylesheet" href="http://at.alicdn.com/t/font_1766283_dobjk7xxze7.css">
+```
+9.在组件中使用（可以通过color改变颜色, 通过font-size改变大小）
+```
+<i class=”iconfont icondown”>
+```
+
+## Detail路由
+### 重难点说明
+1. 图片放大镜效果
+2. 小图轮播
+
+### 接口请求函数
+```
+// 获取商品详情信息
+export const reqDetailInfo = (skuId) => ajax.get(`/item/${skuId}`)
+``` 
+### vuex管理的详情模块
+
+### 商品小图片列表组件（pages/Detail/ImageList）
+
+### 图片放大镜组件（pages/Detail/Zoom）
+
+### Detail路由组件
+
+### 注册Detail路由（router/routes.js)
+```
+{
+  path: '/detail/:skuId',
+  component: Detail
+},
+```
+
+## AddCartSuccess路由
+### 重难点说明
+1. 区别使用sessionStorage 与 localStorage
+
+### 跳转到此路由
+```
+/* 
+添加到购物车
+*/
+async addToCart() {
+  const { skuId } = this.$route.params
+  const {skuNum} = this
+  window.sessionStorage.setItem('SKU_INFO', JSON.stringify(this.skuInfo))
+  const message = await this.$store.dispatch('addToCart', {skuId,skuNum})
+  if (message) { // 有错误message, 提示添加购物失败
+    alert(message)
+  } else { // 添加购物车成功, 跳转到成功界面
+    this.$router.push({
+            path: '/addcartsuccess',
+        query: {skuNum }
+    })
+  }
+}
+```
+
+### AddCartSuccess路由组件
+
+## ShopCart路由
+### 重难点说明
+1. 用户临时ID的处理
+2. 购物车数据的管理(复杂)
+3. 不使用v-model监控用户输入
+4. async / await / Promise.all() 的使用
+
+### 接口请求函数
+```
+// 添加到购物车(修改购物项数量)
+// skuNum指定为改变的数量, 如果是减少就是负数
+export const reqAddToCart = (skuId, skuNum) => ajax.post(`/cart/addToCart/${skuId}/${skuNum}`)
+// 获取购物车数据列表
+export const reqCartList = () => ajax.get('/cart/cartList')
+```
+
+### vuex管理的购物车模块（store/shopCart/index.js）
+
+### 请求携带唯一的用户临时ID
+1. 下载工具包
+```
+npm install uuid store -S
+```
+2. utils/uuid_token.js
+3. store/user/index.js
+4. api/ajax.js
+
+### shopCart路由组件
+
+## 注册与登录组件
+### 重难点说明
+1. 注册/登陆请求后组件的响应处理
+2. 登陆后自动携带token数据
+
+### 接口请求函数的书写（api/index.js)
+
+### vuex管理数据
+
+### 工具函数
+
+### 注册路由组件的书写
+
+### 登录路由组件的书写
+
+### 登录后请求自动携带token数据
+
+## 导航/路由守卫
+### 重难点说明
+1)理解导航守卫
+2)使用导航守卫实现以下功能
+        a.只有登陆了, 才能查看交易/支付/个人中心界面
+        b.只有没有登陆, 才能查看登陆界面
+        c.只有携带的skuNum以及sessionStorage中有skuInfo数据, 才能查看添加购物车成功的界面
+        d.只能从购物车界面, 才能跳转到交易界面
+        e.只能从交易界面, 才能跳转到支付界面
+        f.只有从支付界面, 才能跳转到支付成功的界面
+
+
+
+
 
 
 
