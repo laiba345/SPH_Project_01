@@ -493,14 +493,160 @@ npm install uuid store -S
 
 ## 导航/路由守卫
 ### 重难点说明
-1)理解导航守卫
-2)使用导航守卫实现以下功能
+1. 理解导航守卫
+2. 使用导航守卫实现以下功能
         a.只有登陆了, 才能查看交易/支付/个人中心界面
         b.只有没有登陆, 才能查看登陆界面
         c.只有携带的skuNum以及sessionStorage中有skuInfo数据, 才能查看添加购物车成功的界面
         d.只能从购物车界面, 才能跳转到交易界面
         e.只能从交易界面, 才能跳转到支付界面
         f.只有从支付界面, 才能跳转到支付成功的界面
+        
+### 导航守卫
+1. 导航守卫是什么？
+- 导航守卫是vue-router提供的下面2个方面的功能（1、监视路由跳转 -->回调函数 2、控制路由跳转）
+2. 应用（一、在跳转到界面前, 进行用户权限检查限制(如是否已登陆) 二、在界面离开前, 做收尾工作）
+
+### 导航守卫分类
+1. 全局守卫: 针对任意路由跳转（a. 全局前置守卫；b. 全局后置守卫）
+2. 路由独享的守卫（前置守卫）
+3. 组件守卫: 只针对当前组件的路由跳转（a. 进入；b. 更新； c.离开）
+
+### 相关API
+1. 全局前置守卫: 在准备跳转到某个路由组件之前 (在开发中用的比较多)
+```
+router.beforeEach((to, from, next) => {
+        // before enter each route component
+})
+说明:
+        ①. to: 目标route
+        ②. from: 起始route
+        ③. next: 函数
+        next(): 执行下一个守卫回调, 如果没有跳转到目标路由
+        next(false)/不执行: 跳转流程在当前处中断, 不会跳转到目标路由组件
+        next(path): 跳转到指定的另一个路由
+```
+2. 全局后置守卫：在跳转到某个路由组件之后
+```
+router.afterEach((to, from) => {
+          
+})
+```
+3. 路由独享守卫
+```
+beforeEnter: (to, from, next) => {
+	        
+}
+```
+4. 组件守卫
+```
+// 在当前组件对象被创建前调用, 不能直接访问this(不是组件对象)
+// 但可以通过next(component => {}), 在回调函数中访问组件对象
+beforeRouteEnter (to, from, next) {
+  next(component => {})
+},
+// 当前组件对象将要更新前调用, 可以访问this
+beforeRouteUpdate (to, from, next) {
+
+},
+// 在当前组件离开前调用, 可以访问this
+beforeRouteLeave (to, from, next) {
+  next()
+}
+```
+
+### 使用导航守卫完成功能
+1. 只有登录了，才能查看交易/支付/个人中心界面
+2. 只有没有登录，才能查看登陆界面
+3. 只有携带的skuNum以及sessionStorage中有skuInfo数据, 才能查看添加购物车成功的界面
+4. 只能从购物车界面，才能跳转到交易界面
+5. 只能从交易界面，跳转到支付界面
+6. 只能从支付界面，才能跳转到支付成功的界面
+
+## 订单与支付
+### 重难点说明
+1. 提交订单
+2. 支付二维码
+3. 获取订单状态
+
+### 下载依赖
+```
+npm install -S qrcode element-ui
+npm install -D babel-plugin-component
+```
+
+### UI组件库的按需打包
+
+### 接口请求函数
+
+### vuex
+
+### 交易路由组件（pages/Trade/index.vue）
+
+### 支付路由组件（pages/Pay/index.vue)
+
+### 我的订单组件路由（pages/Center/index.vue)
+
+## 其他
+### 图片懒加载
+1. 图片懒加载特点说明
+- 还没有加载得到目标图片时, 先显示loading图片
+- 在<img>进入可视范围才加载请求目标图片
+2. 下载依赖
+```
+npm install vue-lazyload
+```
+3. 引入并配置loading图片
+```
+import VueLazyload from 'vue-lazyload'
+import loading from '@/assets/images/loading.gif'
+// 在图片界面没有进入到可视范围前不加载, 在没有得到图片前先显示loading图片
+Vue.use(VueLazyload, { // 内部自定义了一个指令lazy
+  loading,  // 指定未加载得到图片之前的loading图片
+})
+```
+4. 对异步获取的图片实现懒加载
+```
+<img v-lazy="goods.defaultImg" />
+```
+
+### 路由懒加载
+1. 理解
+```
+(1)当打包构建应用时，JS包会变得非常大，影响页面加载。如果我们能把不同路由对应的组件分割成不同的代码块，然后当路由被访问的时候才加载对应组件，这样就更加高效了
+(2)本质就是Vue 的异步组件在路由组件上的应用
+(3)需要使用动态import语法, 也就是import()函数
+```
+2. 编码
+```
+// import Home from '@/pages/Home'
+// import Search from '@/pages/Search'
+// import Detail from '@/pages/Detail'
+
+/* 
+1. import('模块路径'): webpack会对被引入的模块单独打包
+2. 路由函数只在第一次请求时才执行, 也就是第一次请求访问对应路由路径时才会请求后台加载对应的js打包文件
+*/
+const Home = () => import('@/pages/Home')
+const Search = () => import('@/pages/Search')
+const Detail = () => import('@/pages/Detail')
+```
+
+### 前台表单校验
+1. 说明
+```
+(1)项目中有一些如注册/登陆表单, 在提交请求前是需要进行表单输入数据校验的
+(2)只有前台表单验证成功才会发请求
+(3)如果校验失败, 以界面红色文本的形式提示, 而不是用alert的形式
+(4)校验的时机, 除了点击提交时, 还有输入过程中实时进行校验
+```
+2. 下载依赖
+```
+npm install vee-validate
+```
+3. 编码（plugins/validate.js)
+
+## 项目编写插件顺序
 
 
 
