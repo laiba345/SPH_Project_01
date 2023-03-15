@@ -10,6 +10,8 @@ npm install ｜ npm install --registry=https://registry.npm.taobao.org（淘宝�
 # 启动服务
 npm run serve
 ```
+## 项目整体框架思维导图
+![项目思维导图](./picture/Vue2电商项目-前台PC.png)
 
 ## 项目描述
 1. 此项目为在线电商Web App (SPA)
