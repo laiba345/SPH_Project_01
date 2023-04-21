@@ -323,13 +323,15 @@ export default {
       let newOrder = "";
       // 根据点击的内容来进行相应的判断操作
       // 这个语句我能确定点击的一定是综合 初始状态，判断点击的是不是综合
+      // 判断多次点击的是不是同一个按钮；
       if (flag == originFlag) {
         newOrder = `${originFlag}:${originSort == "desc" ? "asc" : "desc"}`;
       } else {
-        // 点击的是价格
+        // 点击的是价格；默认的是降序
         newOrder = `${flag}:${"desc"}`;
       }
       // 上面获取到了新的order以后，需要将新的order赋予searchParams
+      // @ 每次都需要进行重新赋值的；所以会重新发生变化 
       this.searchParams.order = newOrder;
       // 再次发请求即可，在做好相应逻辑以后，还是需要传入相应的值才可以
       this.getData();

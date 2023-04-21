@@ -3,8 +3,9 @@
   <div class="type-nav">
     <div class="container">
       <!-- 事件委派 | 事件委托(给父元素)  -->
-      <div @mouseleave="leaveShow" @mouseenter="enterShow">
-        <h2 class="all">全部商品分类</h2>
+      <!-- @mouseenter="enterShow" -->
+      <div @mouseleave="leaveShow" @mouseenter="enterShow" >
+        <h2 class="all" >全部商品分类</h2>
         <!-- 三级联动 -->
         <!-- 过渡动画 -->
         <transition name="sort">
