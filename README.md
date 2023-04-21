@@ -13,14 +13,14 @@ npm run serve
 ## 项目整体框架思维导图
 ![项目思维导图](./picture/Vue2电商项目-前台PC.png)
 
+## 项目功能界面
+![项目主界面](./picture/homePage.png)
+
 ## 项目描述
 1. 此项目为在线电商Web App (SPA)
 2. 包括首页, 搜索列表, 商品详情, 购物车, 订单, 支付, 用户登陆/注册等多个子模块
 3. 使用Vue全家桶+ES6+Webpack+Axios等前端最新最热的技术
 4. 采用模块化、组件化、工程化的模式开发
-
-## 项目功能界面
-![项目主界面](./picture/homePage.png)
 
 ## 技术选型
 ![技术选型](./picture/technologySelection.png)
